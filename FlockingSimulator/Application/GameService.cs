@@ -20,9 +20,9 @@ namespace FlockingGame.Application
             this.collisionDetector = collisionDetector;
             this.missileFactory = missileFactory;
         }
-        public void Initialize(IEnumerable<Boid> initial Flock)
+        public void Initialize(IEnumerable<Boid> initialFlock)
         {
-            Flock.AddRange(initial Flock);
+            Flock.AddRange(initialFlock);
         }
 
         public void FireMissile()
@@ -34,7 +34,7 @@ namespace FlockingGame.Application
         public void Update()
         {
             foreach (var boid in Flock)
-                boid.Position += boid.CalculateFlocking(Flock.Apppend(PlayerShip)) * BoidConfig.MaxSpeed;
+                boid.Position += boid.CalculateFlocking(Flock.Append(PlayerShip)) * BoidConfig.MaxSpeed;
 
             foreach (var missile in Missiles)
             {
@@ -46,12 +46,12 @@ namespace FlockingGame.Application
 
             //detect collisions between missiles and boids
             var collisions = collisionDetector.Detect(Flock.Cast<SpaceObject>(), Missiles.Cast<SpaceObject>());
-            HandleCollisions(collision);
+            HandleCollisions(collisions);
         }
 
         private void HandleCollisions(IEnumerable<(SpaceObject, SpaceObject)> collisions)
         {
-            foreach (var(a.b) in collisions)
+            foreach (var (a, b) in collisions)
             {
                 if (a is Boid boid)
                 {
