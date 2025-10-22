@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FlockingSimulator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+616ed36ac973154923d1bd04187dfbedbd8d57f0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c5a318d9870dc638f1af6689a9517093ecf9e72e")]
 [assembly: System.Reflection.AssemblyProductAttribute("FlockingSimulator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FlockingSimulator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
