@@ -1,6 +1,10 @@
-using FLockingGame.Domain.Entities;
-using FLockingGame.Domain.Interfaces;
-using System.Numerics;
+using FlockingSimulator.Domain.Entities;   // Boid, Ship, Missile, SpaceObject
+using FlockingSimulator.Domain.Interfaces; // ICollisionDetector, IMissileFactory
+using System.Numerics;                     // Vector2
+using System.Collections.Generic;
+using System.Linq;
+using System;
+
 
 namespace FlockingGame.Application
 {

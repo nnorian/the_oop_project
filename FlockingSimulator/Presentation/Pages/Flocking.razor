@@ -1,0 +1,48 @@
+@using FlockingSimulator.Application
+@using FlockingSimulator.Infrastructure.Rendering
+
+@page "/flocking"
+@inject GameService GameService
+@inject IJSRuntime JS
+
+<canvas id="gameCanvas" width="840" height="460" style="border:1px solid black;"></canvas>
+
+<button @onclick="Fire">Fire Missile</button>
+<p>Score: @GameService.Score | Lives: @GameService.Lives</p>
+
+@code {
+    private CanvasRenderer renderer;
+
+    protected override void OnInitialized()
+    {
+        renderer = new CanvasRenderer(JS);
+        StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var timer = new System.Timers.Timer(16); // ~60fps
+            timer.Elapsed += async (_, _) =>
+            {
+                GameService.Update();
+                await Render();
+            };
+            timer.Start();
+        }
+    }
+
+    private async Task Render()
+    {
+        foreach (var boid in GameService.Flock)
+            await renderer.DrawBoid(boid);
+
+        await renderer.DrawShip(GameService.PlayerShip);
+
+        foreach (var missile in GameService.Missiles)
+            await renderer.DrawMissile(missile);
+    }
+
+    private void Fire() => GameService.FireMissile();
+}
