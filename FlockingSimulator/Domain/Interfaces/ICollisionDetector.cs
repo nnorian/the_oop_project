@@ -1,10 +1,8 @@
-
-using FlockingSimulator.Domain.Entities;
+using FlockingGame.Domain.Entities;
 using System.Collections.Generic;
 
-namespace FlockingSimulator.Domain.Interfaces
+namespace FlockingGame.Domain.Interfaces
 {
-    // Interface for collision detection between space objects
     public interface ICollisionDetector
     {
         IEnumerable<(SpaceObject, SpaceObject)> Detect(IEnumerable<SpaceObject> objects1, IEnumerable<SpaceObject> objects2);
