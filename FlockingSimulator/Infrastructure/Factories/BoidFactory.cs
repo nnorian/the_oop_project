@@ -1,30 +1,31 @@
 using FlockingSimulator.Domain.Entities;
 using FlockingSimulator.Domain.Interfaces;
+using FlockingGame.Domain.Config;
 using System.Numerics;
+using System;
 
 namespace FlockingSimulator.Infrastructure.Factories
 {
     // Factory class to create Boid instances with random positions
     public class BoidFactory
     {
-        // Flocking behavior to be assigned to created boids
-        private readonly IFlockingBehavior behavior;
+        private readonly IFlockingBehavior _behavior;
+        private readonly Random _random = new();
 
         public BoidFactory(IFlockingBehavior behavior)
         {
-            this.behavior = behavior;
+            _behavior = behavior;
         }
 
-        // Method to create a boid with a random position within the canvas bounds
         public Boid CreateRandomBoid()
         {
-            var random = new Random();
-            return new Boid(behavior, random.NextDouble() > 0.5)
+            return new Boid(_behavior, _random.NextDouble() > 0.5)
             {
-                // Assign a random position within the defined canvas dimensions
-                Position = new Vector2((float)(random.NextDouble() * PhysicsConfig.CanvasWidth),
-                                       (float)(random.NextDouble() * PhysicsConfig.CanvasHeight))
+                Position = new Vector2((float)(_random.NextDouble() * PhysicsConfig.CanvasWidth),
+                                       (float)(_random.NextDouble() * PhysicsConfig.CanvasHeight)),
+                Velocity = new Vector2((float)(_random.NextDouble() * 2 - 1), (float)(_random.NextDouble() * 2 - 1))
             };
         }
     }
+}
 }

@@ -1,17 +1,16 @@
-using FlockingSimulator.Domain.Entities;   // Boid, Ship, Missile, SpaceObject
-using FlockingSimulator.Domain.Interfaces; // ICollisionDetector, IMissileFactory
-using System.Numerics;                     // Vector2
+using FlockingGame.Domain.Entities;
+using FlockingGame.Domain.Interfaces;
+using FlockingGame.Domain.Config;
+using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-
 
 namespace FlockingGame.Application
 {
     public class GameService
     {
-        private readonly ICollisionDetector collisionDetector;
-        private readonly IMissileFactory missileFactory;
+        private readonly ICollisionDetector _collisionDetector;
+        private readonly IMissileFactory _missileFactory;
 
         public List<Boid> Flock { get; private set; } = new();
         public Ship PlayerShip { get; private set; } = new();
@@ -21,25 +20,54 @@ namespace FlockingGame.Application
 
         public GameService(ICollisionDetector collisionDetector, IMissileFactory missileFactory)
         {
-            this.collisionDetector = collisionDetector;
-            this.missileFactory = missileFactory;
+            _collisionDetector = collisionDetector;
+            _missileFactory = missileFactory;
         }
+
         public void Initialize(IEnumerable<Boid> initialFlock)
         {
+            Flock.Clear();
             Flock.AddRange(initialFlock);
         }
 
         public void FireMissile()
         {
-            var missile = missileFactory.CreateMissile(PlayerShip.Position, PlayerShip.Rotation);
+            var missile = _missileFactory.CreateMissile(PlayerShip.Position, PlayerShip.Rotation);
             Missiles.Add(missile);
         }
 
         public void Update()
         {
-            foreach (var boid in Flock)
-                boid.Position += boid.CalculateFlocking(Flock.Append(PlayerShip)) * BoidConfig.MaxSpeed;
+            // Update Boids
+            var allSpace = Flock.Cast<SpaceObject>().Append(PlayerShip).ToList();
+            foreach (var boid in Flock.ToList())
+            {
+                var steering = boid.CalculateFlocking(allSpace);
+                // steering is a desired velocity vector; clamp and integrate
+                if (steering != Vector2.Zero)
+                {
+                    var desired = Vector2.Normalize(steering) * BoidConfig.MaxSpeed;
+                    var steer = desired - boid.Velocity;
+                    // clamp steer
+                    if (steer.Length() > BoidConfig.MaxForce)
+                        steer = Vector2.Normalize(steer) * BoidConfig.MaxForce;
+                    boid.Velocity += steer * PhysicsConfig.DeltaTime;
+                }
 
+                // clamp speed
+                if (boid.Velocity.Length() > BoidConfig.MaxSpeed)
+                    boid.Velocity = Vector2.Normalize(boid.Velocity) * BoidConfig.MaxSpeed;
+
+                boid.Position += boid.Velocity * PhysicsConfig.DeltaTime;
+
+                // wrap around screen edges
+                if (boid.Position.X < 0) boid.Position = new Vector2(PhysicsConfig.CanvasWidth, boid.Position.Y);
+                if (boid.Position.X > PhysicsConfig.CanvasWidth) boid.Position = new Vector2(0, boid.Position.Y);
+                if (boid.Position.Y < 0) boid.Position = new Vector2(boid.Position.X, PhysicsConfig.CanvasHeight);
+                if (boid.Position.Y > PhysicsConfig.CanvasHeight) boid.Position = new Vector2(boid.Position.X, 0);
+            }
+
+            // Update Missiles
             foreach (var missile in Missiles)
             {
                 missile.Position += missile.Velocity * PhysicsConfig.DeltaTime;
@@ -48,8 +76,8 @@ namespace FlockingGame.Application
 
             Missiles.RemoveAll(m => !m.IsActive || m.LifeTime <= 0);
 
-            //detect collisions between missiles and boids
-            var collisions = collisionDetector.Detect(Flock.Cast<SpaceObject>(), Missiles.Cast<SpaceObject>());
+            // Detect collisions (boids vs missiles)
+            var collisions = _collisionDetector.Detect(Flock.Cast<SpaceObject>(), Missiles.Cast<SpaceObject>());
             HandleCollisions(collisions);
         }
 
@@ -62,10 +90,14 @@ namespace FlockingGame.Application
                     Flock.Remove(boid);
                     Score += 10;
                 }
-                if (b is Missile missile)
+                if (b is Boid boid2)
                 {
-                    missile.IsActive = false;
+                    Flock.Remove(boid2);
+                    Score += 10;
                 }
+
+                if (a is Missile missileA) missileA.IsActive = false;
+                if (b is Missile missileB) missileB.IsActive = false;
             }
         }
     }

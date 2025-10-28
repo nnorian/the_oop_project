@@ -1,4 +1,5 @@
 using FlockingSimulator.Domain.Entities;
+using System.Numerics;
 
 namespace FlockingSimulator.Domain.Interfaces
 {

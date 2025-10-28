@@ -14,7 +14,7 @@ namespace FlockingSimulator.Domain.Entities
         {
             this.behavior = behavior;
             IsAggressive = isAggressive;
-            Radius = 5;
+            Radius = 5f;
         }
 
         // method to calculate the steering vector based on neighboring boids

@@ -1,4 +1,4 @@
-@page "/"
+
 @using FlockingSimulator.Application
 @using FlockingSimulator.Domain.Entities
 @using FlockingSimulator.Domain.Config
@@ -9,203 +9,69 @@
 @implements IDisposable
 @inject IJSRuntime JS
 
-<PageTitle>Flocking Simulator</PageTitle>
+@page "/flocking"
+@inject FlockingGame.Application.GameService GameService
+@inject IJSRuntime JS
 
-<div class="game-container">
-    @if (!gameStarted)
-    {
-        <div class="welcome-screen" @onclick="StartGame">
-            <h1>Welcome!</h1>
-            <p>This is a flocking simulator mimicking the behavior of Solanum tuberosum with boids</p>
-            <p><span style="color: red;">Red Boid</span> - aggressive, won't steer away, does damage</p>
-            <p><span style="color: white;">White Boid</span> - non-aggressive, will steer away, does no damage</p>
-            <p>Your mission: destroy all red boids, minimal casualties to white boids, preferably none at all</p>
-            <p>Good luck!</p>
-            <br/>
-            <p style="font-size: 12px;">Red boid: 1 point</p>
-            <p style="font-size: 12px;">White boid: 0 point</p>
-            <p style="font-size: 12px;">Collide Red boid: 0.5 point</p>
-            <p style="margin-top: 20px;"><strong>Click to start</strong></p>
-        </div>
-    }
-    else
-    {
-        <canvas @ref="canvasRef" 
-                width="@PhysicsConfig.CanvasWidth" 
-                height="@PhysicsConfig.CanvasHeight" 
-                tabindex="0"
-                @onkeydown="HandleKeyDown"
-                @onkeyup="HandleKeyUp"
-                style="border: 1px solid black; background: gray;">
-        </canvas>
-        
-        <div class="game-info">
-            <p>Bad boids: @gameService.AggressiveBoids</p>
-            <p>Lives: @gameService.Lives</p>
-            <p>Score: @gameService.Score</p>
-        </div>
+<h3>Flocking Game</h3>
+<canvas id="gameCanvas" width="840" height="460" style="border:1px solid black;"></canvas>
 
-        @if (gameService.GameWon)
-        {
-            <div class="game-over">
-                <h2>WON!</h2>
-                <p>Bad boids destroyed: @gameService.Score</p>
-                <p>Good boids destroyed: @gameService.BoidsDestroyed</p>
-            </div>
-        }
-        else if (gameService.GameLost)
-        {
-            <div class="game-over" style="color: red;">
-                <h2>CRASHED!</h2>
-            </div>
-        }
-    }
+<div style="margin-top:8px;">
+    <button class="btn btn-primary" @onclick="Fire">Fire Missile</button>
+    <span style="margin-left:16px;">Score: @GameService.Score | Lives: @GameService.Lives | Boids: @GameService.Flock.Count</span>
 </div>
 
 @code {
-    private ElementReference canvasRef;
-    private GameService gameService = null!;
-    private System.Threading.Timer? gameTimer;
-    private bool gameStarted = false;
-    
-    private IInputCommand? rotateLeftCommand;
-    private IInputCommand? rotateRightCommand;
-    private IInputCommand? accelerateCommand;
-    private IInputCommand? fireMissileCommand;
+    private Infrastructure.Rendering.CanvasRenderer _renderer;
+    private System.Timers.Timer _timer;
+    private bool _timerStarted = false;
 
     protected override void OnInitialized()
     {
-        var behavior = new FlockingBehavior();
-        var collisionDetector = new CollisionSystem();
-        var missileFactory = new MissileFactory();
-        
-        gameService = new GameService(collisionDetector, missileFactory);
-        
-        var boidFactory = new BoidFactory(behavior);
-        var initialFlock = Enumerable.Range(0, BoidConfig.FlockCount)
-            .Select(_ => boidFactory.CreateRandomBoid());
-        
-        gameService.Initialize(initialFlock);
-        
-        rotateLeftCommand = new RotateLeftCommand();
-        rotateRightCommand = new RotateRightCommand();
-        accelerateCommand = new AccelerateCommand();
-        fireMissileCommand = new FireMissileCommand(missile => gameService.Missiles.Add(missile));
+        _renderer = new Infrastructure.Rendering.CanvasRenderer(JS);
     }
 
-    private void StartGame()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        gameStarted = true;
-        gameTimer = new System.Threading.Timer(_ =>
+        if (firstRender && !_timerStarted)
         {
-            gameService.Update();
-            InvokeAsync(async () =>
+            // ensure JS has initialized context (cache getContext)
+            await JS.InvokeVoidAsync("game.initCanvas", "gameCanvas", 840, 460);
+
+            // Start update loop
+            _timer = new System.Timers.Timer(PhysicsConfigMs); // ms
+            _timer.Elapsed += async (_, _) =>
             {
-                await RenderGame();
-                StateHasChanged();
-            });
-        }, null, 0, 16); // ~60 FPS
-    }
-
-    private async Task RenderGame()
-    {
-        if (!gameStarted || gameService.GameWon || gameService.GameLost)
-            return;
-
-        await JS.InvokeVoidAsync("clearCanvas", canvasRef);
-        
-        // Draw boids
-        foreach (var boid in gameService.Flock)
-        {
-            var color = boid.IsAggressive ? "red" : "white";
-            await JS.InvokeVoidAsync("drawBoid", canvasRef, boid.Position.X, boid.Position.Y, 
-                boid.Velocity.X, boid.Velocity.Y, color);
-        }
-        
-        // Draw ship
-        await JS.InvokeVoidAsync("drawShip", canvasRef, gameService.PlayerShip.Position.X, 
-            gameService.PlayerShip.Position.Y, gameService.PlayerShip.Rotation);
-        
-        // Draw missiles
-        foreach (var missile in gameService.Missiles)
-        {
-            await JS.InvokeVoidAsync("drawMissile", canvasRef, missile.Position.X, missile.Position.Y);
+                // marshal back to UI thread
+                await InvokeAsync(async () =>
+                {
+                    GameService.Update();
+                    await RenderFrame();
+                });
+            };
+            _timer.Start();
+            _timerStarted = true;
         }
     }
 
-    private void HandleKeyDown(KeyboardEventArgs e)
+    private const double PhysicsConfigMs = 1000.0 / 60.0; // 60Hz
+
+    private async Task RenderFrame()
     {
-        switch (e.Key.ToLower())
-        {
-            case "arrowleft":
-                rotateLeftCommand?.Execute(gameService.PlayerShip);
-                break;
-            case "arrowright":
-                rotateRightCommand?.Execute(gameService.PlayerShip);
-                break;
-            case "arrowup":
-                accelerateCommand?.Execute(gameService.PlayerShip);
-                break;
-            case " ":
-                gameService.FireMissile();
-                break;
-        }
+        await _renderer.Clear();
+
+        // draw boids
+        foreach (var b in GameService.Flock)
+            await _renderer.DrawBoid(b.Position.X, b.Position.Y, b.Rotation, b.IsAggressive);
+
+        // draw ship
+        var s = GameService.PlayerShip;
+        await _renderer.DrawShip(s.Position.X, s.Position.Y, s.Rotation);
+
+        // draw missiles
+        foreach (var m in GameService.Missiles)
+            await _renderer.DrawMissile(m.Position.X, m.Position.Y);
     }
 
-    private void HandleKeyUp(KeyboardEventArgs e)
-    {
-        // Reset rotation when keys are released
-        if (e.Key.ToLower() == "arrowleft" || e.Key.ToLower() == "arrowright")
-        {
-            // Stop rotation
-        }
-    }
-
-    public void Dispose()
-    {
-        gameTimer?.Dispose();
-    }
+    private void Fire() => GameService.FireMissile();
 }
-
-<style>
-    .game-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-        font-family: monospace;
-    }
-
-    .welcome-screen {
-        background: #333;
-        color: blue;
-        padding: 40px;
-        border-radius: 10px;
-        cursor: pointer;
-        max-width: 800px;
-        text-align: left;
-    }
-
-    .welcome-screen:hover {
-        background: #444;
-    }
-
-    .game-info {
-        margin-top: 10px;
-        color: white;
-        font-size: 15px;
-    }
-
-    .game-over {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 24px;
-        color: blue;
-    }
-
-    canvas {
-        display: block;
-    }
-</style>

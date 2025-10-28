@@ -8,9 +8,9 @@ namespace FlockingSimulator.Domain.Entities
         // constructor to initialize the ship's properties
         public Ship()
         {
-            Radius = 10;
+            Radius = 10f;
             // Initial position of the ship in center
-            Position = new Vector2(420, 230);
+            Position = new Vector2(420f, 230f);
         }
     }
 }

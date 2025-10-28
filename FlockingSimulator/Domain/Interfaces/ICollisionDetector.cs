@@ -1,5 +1,6 @@
 
-using FlockingGSimulator.Domain.Entities;
+using FlockingSimulator.Domain.Entities;
+using System.Collections.Generic;
 
 namespace FlockingSimulator.Domain.Interfaces
 {
