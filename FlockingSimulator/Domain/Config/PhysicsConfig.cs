@@ -1,4 +1,4 @@
-namespace FlockingGame.Domain.Config
+namespace FlockingSimulator.Domain.Config
 {
     public static class PhysicsConfig
     {

@@ -1,7 +1,7 @@
-using FlockingGame.Domain.Entities;
-using FlockingGame.Domain.Interfaces;
+using FlockingSimulator.Domain.Entities;
+using FlockingSimulator.Domain.Interfaces;
 
-namespace FlockingGame.Infrastructure.Systems
+namespace FlockingSimulator.Infrastructure.Systems
 {
     // this class implements collision detection between space objects
     public class CollisionSystem : ICollisionDetector

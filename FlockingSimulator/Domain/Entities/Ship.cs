@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace FlockingGame.Domain.Entities
+namespace FlockingSimulator.Domain.Entities
 {
     // This class represents the player's ship
     public class Ship : SpaceObject

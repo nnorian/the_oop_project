@@ -1,7 +1,7 @@
-using FlockingGame.Application;
-using FlockingGame.Domain.Interfaces;
-using FlockingGame.Infrastructure.Factories;
-using FlockingGame.Infrastructure.Systems;
+using FlockingSimulator.Application;
+using FlockingSimulator.Domain.Interfaces;
+using FlockingSimulator.Infrastructure.Factories;
+using FlockingSimulator.Infrastructure.Systems;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 

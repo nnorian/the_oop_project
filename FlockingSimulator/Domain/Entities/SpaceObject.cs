@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace FlockingGame.Domain.Entities
+namespace FlockingSimulator.Domain.Entities
 {
     public abstract class SpaceObject
     {

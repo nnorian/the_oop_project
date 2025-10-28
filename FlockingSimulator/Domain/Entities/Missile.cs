@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace FlockingGame.Domain.Entities
+namespace FlockingSimulator.Domain.Entities
 {
     // this class represents a missile fired by the player's ship
     public class Missile : SpaceObject

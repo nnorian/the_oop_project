@@ -1,8 +1,8 @@
-using FlockingGame.Domain.Entities;
-using FlockingGame.Domain.Interfaces;
+using FlockingSimulator.Domain.Entities;
+using FlockingSimulator.Domain.Interfaces;
 using System.Numerics;
 
-namespace FlockingGame.Infrastructure.Factories
+namespace FlockingSimulator.Infrastructure.Factories
 {
     // Factory class to create Boid instances with random positions
     public class BoidFactory

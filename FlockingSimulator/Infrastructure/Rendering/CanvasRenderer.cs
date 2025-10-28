@@ -1,9 +1,9 @@
 // This will use JS Interop to draw on canvas, called from Presentation Layer
 using Microsoft.JSInterop;
-using FlockingGame.Domain.Entities;
+using FlockingSimulator.Domain.Entities;
 using System.Numerics;
 
-namespace FlockingGame.Infrastructure.Rendering { 
+namespace FlockingSimulator.Infrastructure.Rendering { 
 
     // Canvas rendering implementation using JS Interop
     public class CanvasRenderer

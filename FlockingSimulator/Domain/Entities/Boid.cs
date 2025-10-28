@@ -1,7 +1,7 @@
 using System.Numerics;
-using FlockingGame.Domain.Interfaces;
+using FlockingSimulator.Domain.Interfaces;
 
-namespace FlockingGame.Domain.Entities
+namespace FlockingSimulator.Domain.Entities
 {
     // this class represents a boid in the flocking simulation
     public class Boid : SpaceObject

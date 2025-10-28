@@ -1,4 +1,4 @@
-namespace FlockingGame.Domain.Config
+namespace FlockingSimulator.Domain.Config
 {
     // This static class holds configuration constants for boid behavior
     public static class BoidConfig

@@ -1,48 +1,211 @@
+@page "/"
 @using FlockingSimulator.Application
-@using FlockingSimulator.Infrastructure.Rendering
-
-@page "/flocking"
-@inject GameService GameService
+@using FlockingSimulator.Domain.Entities
+@using FlockingSimulator.Domain.Config
+@using FlockingSimulator.Infrastructure.Factories
+@using FlockingSimulator.Infrastructure.Systems
+@using FlockingSimulator.Infrastructure.Behaviors
+@using FlockingSimulator.Application.Commands
+@implements IDisposable
 @inject IJSRuntime JS
 
-<canvas id="gameCanvas" width="840" height="460" style="border:1px solid black;"></canvas>
+<PageTitle>Flocking Simulator</PageTitle>
 
-<button @onclick="Fire">Fire Missile</button>
-<p>Score: @GameService.Score | Lives: @GameService.Lives</p>
+<div class="game-container">
+    @if (!gameStarted)
+    {
+        <div class="welcome-screen" @onclick="StartGame">
+            <h1>Welcome!</h1>
+            <p>This is a flocking simulator mimicking the behavior of Solanum tuberosum with boids</p>
+            <p><span style="color: red;">Red Boid</span> - aggressive, won't steer away, does damage</p>
+            <p><span style="color: white;">White Boid</span> - non-aggressive, will steer away, does no damage</p>
+            <p>Your mission: destroy all red boids, minimal casualties to white boids, preferably none at all</p>
+            <p>Good luck!</p>
+            <br/>
+            <p style="font-size: 12px;">Red boid: 1 point</p>
+            <p style="font-size: 12px;">White boid: 0 point</p>
+            <p style="font-size: 12px;">Collide Red boid: 0.5 point</p>
+            <p style="margin-top: 20px;"><strong>Click to start</strong></p>
+        </div>
+    }
+    else
+    {
+        <canvas @ref="canvasRef" 
+                width="@PhysicsConfig.CanvasWidth" 
+                height="@PhysicsConfig.CanvasHeight" 
+                tabindex="0"
+                @onkeydown="HandleKeyDown"
+                @onkeyup="HandleKeyUp"
+                style="border: 1px solid black; background: gray;">
+        </canvas>
+        
+        <div class="game-info">
+            <p>Bad boids: @gameService.AggressiveBoids</p>
+            <p>Lives: @gameService.Lives</p>
+            <p>Score: @gameService.Score</p>
+        </div>
+
+        @if (gameService.GameWon)
+        {
+            <div class="game-over">
+                <h2>WON!</h2>
+                <p>Bad boids destroyed: @gameService.Score</p>
+                <p>Good boids destroyed: @gameService.BoidsDestroyed</p>
+            </div>
+        }
+        else if (gameService.GameLost)
+        {
+            <div class="game-over" style="color: red;">
+                <h2>CRASHED!</h2>
+            </div>
+        }
+    }
+</div>
 
 @code {
-    private CanvasRenderer renderer;
+    private ElementReference canvasRef;
+    private GameService gameService = null!;
+    private System.Threading.Timer? gameTimer;
+    private bool gameStarted = false;
+    
+    private IInputCommand? rotateLeftCommand;
+    private IInputCommand? rotateRightCommand;
+    private IInputCommand? accelerateCommand;
+    private IInputCommand? fireMissileCommand;
 
     protected override void OnInitialized()
     {
-        renderer = new CanvasRenderer(JS);
-        StateHasChanged();
+        var behavior = new FlockingBehavior();
+        var collisionDetector = new CollisionSystem();
+        var missileFactory = new MissileFactory();
+        
+        gameService = new GameService(collisionDetector, missileFactory);
+        
+        var boidFactory = new BoidFactory(behavior);
+        var initialFlock = Enumerable.Range(0, BoidConfig.FlockCount)
+            .Select(_ => boidFactory.CreateRandomBoid());
+        
+        gameService.Initialize(initialFlock);
+        
+        rotateLeftCommand = new RotateLeftCommand();
+        rotateRightCommand = new RotateRightCommand();
+        accelerateCommand = new AccelerateCommand();
+        fireMissileCommand = new FireMissileCommand(missile => gameService.Missiles.Add(missile));
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private void StartGame()
     {
-        if (firstRender)
+        gameStarted = true;
+        gameTimer = new System.Threading.Timer(_ =>
         {
-            var timer = new System.Timers.Timer(16); // ~60fps
-            timer.Elapsed += async (_, _) =>
+            gameService.Update();
+            InvokeAsync(async () =>
             {
-                GameService.Update();
-                await Render();
-            };
-            timer.Start();
+                await RenderGame();
+                StateHasChanged();
+            });
+        }, null, 0, 16); // ~60 FPS
+    }
+
+    private async Task RenderGame()
+    {
+        if (!gameStarted || gameService.GameWon || gameService.GameLost)
+            return;
+
+        await JS.InvokeVoidAsync("clearCanvas", canvasRef);
+        
+        // Draw boids
+        foreach (var boid in gameService.Flock)
+        {
+            var color = boid.IsAggressive ? "red" : "white";
+            await JS.InvokeVoidAsync("drawBoid", canvasRef, boid.Position.X, boid.Position.Y, 
+                boid.Velocity.X, boid.Velocity.Y, color);
+        }
+        
+        // Draw ship
+        await JS.InvokeVoidAsync("drawShip", canvasRef, gameService.PlayerShip.Position.X, 
+            gameService.PlayerShip.Position.Y, gameService.PlayerShip.Rotation);
+        
+        // Draw missiles
+        foreach (var missile in gameService.Missiles)
+        {
+            await JS.InvokeVoidAsync("drawMissile", canvasRef, missile.Position.X, missile.Position.Y);
         }
     }
 
-    private async Task Render()
+    private void HandleKeyDown(KeyboardEventArgs e)
     {
-        foreach (var boid in GameService.Flock)
-            await renderer.DrawBoid(boid);
-
-        await renderer.DrawShip(GameService.PlayerShip);
-
-        foreach (var missile in GameService.Missiles)
-            await renderer.DrawMissile(missile);
+        switch (e.Key.ToLower())
+        {
+            case "arrowleft":
+                rotateLeftCommand?.Execute(gameService.PlayerShip);
+                break;
+            case "arrowright":
+                rotateRightCommand?.Execute(gameService.PlayerShip);
+                break;
+            case "arrowup":
+                accelerateCommand?.Execute(gameService.PlayerShip);
+                break;
+            case " ":
+                gameService.FireMissile();
+                break;
+        }
     }
 
-    private void Fire() => GameService.FireMissile();
+    private void HandleKeyUp(KeyboardEventArgs e)
+    {
+        // Reset rotation when keys are released
+        if (e.Key.ToLower() == "arrowleft" || e.Key.ToLower() == "arrowright")
+        {
+            // Stop rotation
+        }
+    }
+
+    public void Dispose()
+    {
+        gameTimer?.Dispose();
+    }
 }
+
+<style>
+    .game-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        font-family: monospace;
+    }
+
+    .welcome-screen {
+        background: #333;
+        color: blue;
+        padding: 40px;
+        border-radius: 10px;
+        cursor: pointer;
+        max-width: 800px;
+        text-align: left;
+    }
+
+    .welcome-screen:hover {
+        background: #444;
+    }
+
+    .game-info {
+        margin-top: 10px;
+        color: white;
+        font-size: 15px;
+    }
+
+    .game-over {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        color: blue;
+    }
+
+    canvas {
+        display: block;
+    }
+</style>
