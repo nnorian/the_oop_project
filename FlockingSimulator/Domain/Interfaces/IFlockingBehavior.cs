@@ -1,7 +1,8 @@
 using System.Numerics;
-using FlockingGame.Domain.Entities;
+using System.Collections.Generic;
+using FlockingSimulator.Domain.Entities;
 
-namespace FlockingGame.Domain.Interfaces
+namespace FlockingSimulator.Domain.Interfaces
 {   
     // this interface defines the contract for flocking behaviors
     public interface IFlockingBehavior

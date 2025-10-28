@@ -1,0 +1,77 @@
+
+@using FlockingSimulator.Application
+@using FlockingSimulator.Domain.Entities
+@using FlockingSimulator.Domain.Config
+@using FlockingSimulator.Infrastructure.Factories
+@using FlockingSimulator.Infrastructure.Systems
+@using FlockingSimulator.Infrastructure.Behaviors
+@using FlockingSimulator.Application.Commands
+@implements IDisposable
+@inject IJSRuntime JS
+
+@page "/flocking"
+@inject FlockingGame.Application.GameService GameService
+@inject IJSRuntime JS
+
+<h3>Flocking Game</h3>
+<canvas id="gameCanvas" width="840" height="460" style="border:1px solid black;"></canvas>
+
+<div style="margin-top:8px;">
+    <button class="btn btn-primary" @onclick="Fire">Fire Missile</button>
+    <span style="margin-left:16px;">Score: @GameService.Score | Lives: @GameService.Lives | Boids: @GameService.Flock.Count</span>
+</div>
+
+@code {
+    private Infrastructure.Rendering.CanvasRenderer _renderer;
+    private System.Timers.Timer _timer;
+    private bool _timerStarted = false;
+
+    protected override void OnInitialized()
+    {
+        _renderer = new Infrastructure.Rendering.CanvasRenderer(JS);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !_timerStarted)
+        {
+            // ensure JS has initialized context (cache getContext)
+            await JS.InvokeVoidAsync("game.initCanvas", "gameCanvas", 840, 460);
+
+            // Start update loop
+            _timer = new System.Timers.Timer(PhysicsConfigMs); // ms
+            _timer.Elapsed += async (_, _) =>
+            {
+                // marshal back to UI thread
+                await InvokeAsync(async () =>
+                {
+                    GameService.Update();
+                    await RenderFrame();
+                });
+            };
+            _timer.Start();
+            _timerStarted = true;
+        }
+    }
+
+    private const double PhysicsConfigMs = 1000.0 / 60.0; // 60Hz
+
+    private async Task RenderFrame()
+    {
+        await _renderer.Clear();
+
+        // draw boids
+        foreach (var b in GameService.Flock)
+            await _renderer.DrawBoid(b.Position.X, b.Position.Y, b.Rotation, b.IsAggressive);
+
+        // draw ship
+        var s = GameService.PlayerShip;
+        await _renderer.DrawShip(s.Position.X, s.Position.Y, s.Rotation);
+
+        // draw missiles
+        foreach (var m in GameService.Missiles)
+            await _renderer.DrawMissile(m.Position.X, m.Position.Y);
+    }
+
+    private void Fire() => GameService.FireMissile();
+}

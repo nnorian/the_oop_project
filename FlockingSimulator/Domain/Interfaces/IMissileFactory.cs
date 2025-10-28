@@ -1,6 +1,7 @@
-using FlockingGame.Domain.Entities;
+using FlockingSimulator.Domain.Entities;
+using System.Numerics;
 
-namespace FlockingGame.Domain.Interfaces
+namespace FlockingSimulator.Domain.Interfaces
 {
     // this interface defines a factory for creating Missile instances
     public interface IMissileFactory
