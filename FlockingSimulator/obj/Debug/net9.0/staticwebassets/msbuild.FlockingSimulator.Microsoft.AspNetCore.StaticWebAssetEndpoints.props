@@ -1,0 +1,16 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/FlockingSimulator/js/game.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\game.js'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-hZ/\u002BcVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1495"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022hZ/\u002BcVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ=\u0022"},{"Name":"Last-Modified","Value":"Mon, 10 Nov 2025 19:56:09 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FlockingSimulator/js/game.zy5xwhkiv5.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\game.js'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"zy5xwhkiv5"},{"Name":"integrity","Value":"sha256-hZ/\u002BcVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ="},{"Name":"label","Value":"_content/FlockingSimulator/js/game.js"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1495"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022hZ/\u002BcVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ=\u0022"},{"Name":"Last-Modified","Value":"Mon, 10 Nov 2025 19:56:09 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+  </ItemGroup>
+</Project>

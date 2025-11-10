@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "u4ikrmBay+I=",
+  "dgSpecHash": "sgG2c6Htwcg=",
   "success": true,
-  "projectFilePath": "C:\\sem3\\the_oop_project\\FlockingSimulator\\FlockingSimulator.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/FlockingSimulator.csproj",
+  "expectedPackageFiles": [
+    "/home/nnorian/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.9/microsoft.aspnetcore.app.ref.9.0.9.nupkg.sha512"
+  ],
   "logs": []
 }

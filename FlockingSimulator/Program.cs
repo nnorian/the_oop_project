@@ -1,7 +1,9 @@
 using FlockingSimulator.Application;
 using FlockingSimulator.Domain.Interfaces;
+using FlockingSimulator.Domain.Config;
 using FlockingSimulator.Infrastructure.Factories;
 using FlockingSimulator.Infrastructure.Systems;
+using FlockingSimulator.Infrastructure.Behaviors;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 

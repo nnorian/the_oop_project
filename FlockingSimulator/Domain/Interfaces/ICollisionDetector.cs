@@ -1,7 +1,7 @@
-using FlockingGame.Domain.Entities;
+using FlockingSimulator.Domain.Entities;
 using System.Collections.Generic;
 
-namespace FlockingGame.Domain.Interfaces
+namespace FlockingSimulator.Domain.Interfaces
 {
     public interface ICollisionDetector
     {

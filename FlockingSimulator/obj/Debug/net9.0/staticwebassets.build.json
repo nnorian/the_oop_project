@@ -1,0 +1,362 @@
+{
+  "Version": 1,
+  "Hash": "liERuk1vbWVLiRm0OLtV/HpuTh1toNieYRm09veiAsE=",
+  "Source": "FlockingSimulator",
+  "BasePath": "_content/FlockingSimulator",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "FlockingSimulator/wwwroot",
+      "Source": "FlockingSimulator",
+      "ContentRoot": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/wwwroot/",
+      "BasePath": "_content/FlockingSimulator",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/obj/Debug/net9.0/compressed/l04p8q7dtz-zy5xwhkiv5.gz",
+      "SourceId": "FlockingSimulator",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/obj/Debug/net9.0/compressed/",
+      "BasePath": "_content/FlockingSimulator",
+      "RelativePath": "js/game#[.{fingerprint=zy5xwhkiv5}]?.js.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/wwwroot/js/game.js",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "mfzp4v7tkx",
+      "Integrity": "oo/BDLWr2RlbSnsLHw0p8SfveofxjGGNfrIATDMhFvg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/wwwroot/js/game.js"
+    },
+    {
+      "Identity": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/wwwroot/js/game.js",
+      "SourceId": "FlockingSimulator",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/wwwroot/",
+      "BasePath": "_content/FlockingSimulator",
+      "RelativePath": "js/game#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "zy5xwhkiv5",
+      "Integrity": "hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/js/game.js"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "js/game.js",
+      "AssetFile": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/obj/Debug/net9.0/compressed/l04p8q7dtz-zy5xwhkiv5.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.001980198020"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "504"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"oo/BDLWr2RlbSnsLHw0p8SfveofxjGGNfrIATDMhFvg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 10 Nov 2025 19:56:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ="
+        }
+      ]
+    },
+    {
+      "Route": "js/game.js",
+      "AssetFile": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/wwwroot/js/game.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1495"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 10 Nov 2025 19:56:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ="
+        }
+      ]
+    },
+    {
+      "Route": "js/game.js.gz",
+      "AssetFile": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/obj/Debug/net9.0/compressed/l04p8q7dtz-zy5xwhkiv5.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "504"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"oo/BDLWr2RlbSnsLHw0p8SfveofxjGGNfrIATDMhFvg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 10 Nov 2025 19:56:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-oo/BDLWr2RlbSnsLHw0p8SfveofxjGGNfrIATDMhFvg="
+        }
+      ]
+    },
+    {
+      "Route": "js/game.zy5xwhkiv5.js",
+      "AssetFile": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/obj/Debug/net9.0/compressed/l04p8q7dtz-zy5xwhkiv5.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.001980198020"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "504"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"oo/BDLWr2RlbSnsLHw0p8SfveofxjGGNfrIATDMhFvg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 10 Nov 2025 19:56:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zy5xwhkiv5"
+        },
+        {
+          "Name": "label",
+          "Value": "js/game.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ="
+        }
+      ]
+    },
+    {
+      "Route": "js/game.zy5xwhkiv5.js",
+      "AssetFile": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/wwwroot/js/game.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1495"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 10 Nov 2025 19:56:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zy5xwhkiv5"
+        },
+        {
+          "Name": "label",
+          "Value": "js/game.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ="
+        }
+      ]
+    },
+    {
+      "Route": "js/game.zy5xwhkiv5.js.gz",
+      "AssetFile": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/obj/Debug/net9.0/compressed/l04p8q7dtz-zy5xwhkiv5.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "504"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"oo/BDLWr2RlbSnsLHw0p8SfveofxjGGNfrIATDMhFvg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 10 Nov 2025 19:56:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zy5xwhkiv5"
+        },
+        {
+          "Name": "label",
+          "Value": "js/game.js.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-oo/BDLWr2RlbSnsLHw0p8SfveofxjGGNfrIATDMhFvg="
+        }
+      ]
+    }
+  ]
+}

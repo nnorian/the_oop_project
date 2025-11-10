@@ -1,17 +1,15 @@
-
 @using FlockingSimulator.Application
 @using FlockingSimulator.Domain.Entities
 @using FlockingSimulator.Domain.Config
 @using FlockingSimulator.Infrastructure.Factories
 @using FlockingSimulator.Infrastructure.Systems
-@using FlockingSimulator.Infrastructure.Behaviors
 @using FlockingSimulator.Application.Commands
+@using Microsoft.JSInterop
 @implements IDisposable
 @inject IJSRuntime JS
 
 @page "/flocking"
-@inject FlockingGame.Application.GameService GameService
-@inject IJSRuntime JS
+@inject FlockingSimulator.Application.GameService GameService
 
 <h3>Flocking Game</h3>
 <canvas id="gameCanvas" width="840" height="460" style="border:1px solid black;"></canvas>
@@ -22,8 +20,8 @@
 </div>
 
 @code {
-    private Infrastructure.Rendering.CanvasRenderer _renderer;
-    private System.Timers.Timer _timer;
+    private Infrastructure.Rendering.CanvasRenderer _renderer = null!;
+    private System.Timers.Timer _timer = null!;
     private bool _timerStarted = false;
 
     protected override void OnInitialized()
@@ -74,4 +72,10 @@
     }
 
     private void Fire() => GameService.FireMissile();
+
+    public void Dispose()
+    {
+        _timer?.Stop();
+        _timer?.Dispose();
+    }
 }

@@ -1,7 +1,7 @@
 // Application/Commands/InputCommand.cs
-using FlockingGame.Domain.Entities;
+using FlockingSimulator.Domain.Entities;
 
-namespace FlockingGame.Application.Commands
+namespace FlockingSimulator.Application.Commands
 {
     // Command interface for handling player input actions
     public interface IInputCommand

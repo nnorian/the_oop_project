@@ -1,11 +1,11 @@
-using FlockingGame.Domain.Entities;
-using FlockingGame.Domain.Interfaces;
-using FlockingGame.Domain.Config;
+using FlockingSimulator.Domain.Entities;
+using FlockingSimulator.Domain.Interfaces;
+using FlockingSimulator.Domain.Config;
 using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FlockingGame.Application
+namespace FlockingSimulator.Application
 {
     public class GameService
     {

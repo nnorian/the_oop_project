@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "/home/nnorian/dev/sem3/oop/the_oop_project/FlockingSimulator/wwwroot/js/game.js",
+      "PackagePath": "staticwebassets/js/game.js"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.FlockingSimulator.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.FlockingSimulator.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.build.FlockingSimulator.props",
+      "PackagePath": "build\\FlockingSimulator.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.buildMultiTargeting.FlockingSimulator.props",
+      "PackagePath": "buildMultiTargeting\\FlockingSimulator.props"
+    },
+    {
+      "Id": "obj/Debug/net9.0/staticwebassets/msbuild.buildTransitive.FlockingSimulator.props",
+      "PackagePath": "buildTransitive\\FlockingSimulator.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

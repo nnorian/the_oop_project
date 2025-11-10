@@ -1,0 +1,304 @@
+{
+  "Version": 1,
+  "ManifestType": "Build",
+  "Endpoints": [
+    {
+      "Route": "js/game.js",
+      "AssetFile": "js/game.js.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.001980198020"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "504"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"oo/BDLWr2RlbSnsLHw0p8SfveofxjGGNfrIATDMhFvg=\""
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 10 Nov 2025 19:56:09 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ="
+        }
+      ]
+    },
+    {
+      "Route": "js/game.js",
+      "AssetFile": "js/game.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1495"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 10 Nov 2025 19:56:09 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ="
+        }
+      ]
+    },
+    {
+      "Route": "js/game.js.gz",
+      "AssetFile": "js/game.js.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "504"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"oo/BDLWr2RlbSnsLHw0p8SfveofxjGGNfrIATDMhFvg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 10 Nov 2025 19:56:09 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-oo/BDLWr2RlbSnsLHw0p8SfveofxjGGNfrIATDMhFvg="
+        }
+      ]
+    },
+    {
+      "Route": "js/game.zy5xwhkiv5.js",
+      "AssetFile": "js/game.js.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.001980198020"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "504"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"oo/BDLWr2RlbSnsLHw0p8SfveofxjGGNfrIATDMhFvg=\""
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 10 Nov 2025 19:56:09 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zy5xwhkiv5"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ="
+        },
+        {
+          "Name": "label",
+          "Value": "js/game.js"
+        }
+      ]
+    },
+    {
+      "Route": "js/game.zy5xwhkiv5.js",
+      "AssetFile": "js/game.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1495"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 10 Nov 2025 19:56:09 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zy5xwhkiv5"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-hZ/+cVB0PmKg32d9HB0OhjTlG8Ra3U7PqqbnA41AcnQ="
+        },
+        {
+          "Name": "label",
+          "Value": "js/game.js"
+        }
+      ]
+    },
+    {
+      "Route": "js/game.zy5xwhkiv5.js.gz",
+      "AssetFile": "js/game.js.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "504"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"oo/BDLWr2RlbSnsLHw0p8SfveofxjGGNfrIATDMhFvg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 10 Nov 2025 19:56:09 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zy5xwhkiv5"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-oo/BDLWr2RlbSnsLHw0p8SfveofxjGGNfrIATDMhFvg="
+        },
+        {
+          "Name": "label",
+          "Value": "js/game.js.gz"
+        }
+      ]
+    }
+  ]
+}

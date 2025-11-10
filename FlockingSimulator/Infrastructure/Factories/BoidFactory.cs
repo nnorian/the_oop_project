@@ -1,6 +1,6 @@
 using FlockingSimulator.Domain.Entities;
 using FlockingSimulator.Domain.Interfaces;
-using FlockingGame.Domain.Config;
+using FlockingSimulator.Domain.Config;
 using System.Numerics;
 using System;
 
@@ -27,5 +27,4 @@ namespace FlockingSimulator.Infrastructure.Factories
             };
         }
     }
-}
 }
