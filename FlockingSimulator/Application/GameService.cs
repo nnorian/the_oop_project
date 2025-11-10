@@ -67,6 +67,18 @@ namespace FlockingSimulator.Application
                 if (boid.Position.Y > PhysicsConfig.CanvasHeight) boid.Position = new Vector2(boid.Position.X, 0);
             }
 
+            // Update Player Ship
+            PlayerShip.Position += PlayerShip.Velocity * PhysicsConfig.DeltaTime;
+
+            // Apply velocity damping (friction) to ship
+            PlayerShip.Velocity *= 0.98f;
+
+            // Wrap ship around screen edges
+            if (PlayerShip.Position.X < 0) PlayerShip.Position = new Vector2(PhysicsConfig.CanvasWidth, PlayerShip.Position.Y);
+            if (PlayerShip.Position.X > PhysicsConfig.CanvasWidth) PlayerShip.Position = new Vector2(0, PlayerShip.Position.Y);
+            if (PlayerShip.Position.Y < 0) PlayerShip.Position = new Vector2(PlayerShip.Position.X, PhysicsConfig.CanvasHeight);
+            if (PlayerShip.Position.Y > PhysicsConfig.CanvasHeight) PlayerShip.Position = new Vector2(PlayerShip.Position.X, 0);
+
             // Update Missiles
             foreach (var missile in Missiles)
             {

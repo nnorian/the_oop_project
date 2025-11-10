@@ -5,6 +5,7 @@
 @using FlockingSimulator.Infrastructure.Systems
 @using FlockingSimulator.Application.Commands
 @using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components.Web
 @implements IDisposable
 @inject IJSRuntime JS
 
@@ -12,17 +13,31 @@
 @inject FlockingSimulator.Application.GameService GameService
 
 <h3>Flocking Game</h3>
-<canvas id="gameCanvas" width="840" height="460" style="border:1px solid black;"></canvas>
+<div id="gameContainer" tabindex="0" @onkeydown="HandleKeyDown" @onkeyup="HandleKeyUp" style="outline: none;">
+    <canvas id="gameCanvas" width="840" height="460" style="border:1px solid black;"></canvas>
+</div>
 
 <div style="margin-top:8px;">
     <button class="btn btn-primary" @onclick="Fire">Fire Missile</button>
     <span style="margin-left:16px;">Score: @GameService.Score | Lives: @GameService.Lives | Boids: @GameService.Flock.Count</span>
 </div>
 
+<div style="margin-top:8px; color:#666;">
+    <strong>Controls:</strong> Arrow Left/Right = Rotate | Arrow Up = Accelerate | Space = Fire Missile
+</div>
+
 @code {
     private Infrastructure.Rendering.CanvasRenderer _renderer = null!;
     private System.Timers.Timer _timer = null!;
     private bool _timerStarted = false;
+
+    // Command objects
+    private readonly RotateLeftCommand _rotateLeftCommand = new();
+    private readonly RotateRightCommand _rotateRightCommand = new();
+    private readonly AccelerateCommand _accelerateCommand = new();
+
+    // Track which keys are currently pressed
+    private readonly HashSet<string> _pressedKeys = new();
 
     protected override void OnInitialized()
     {
@@ -36,6 +51,9 @@
             // ensure JS has initialized context (cache getContext)
             await JS.InvokeVoidAsync("game.initCanvas", "gameCanvas", 840, 460);
 
+            // Focus the game container so keyboard events work immediately
+            await JS.InvokeVoidAsync("eval", "document.getElementById('gameContainer').focus()");
+
             // Start update loop
             _timer = new System.Timers.Timer(PhysicsConfigMs); // ms
             _timer.Elapsed += async (_, _) =>
@@ -43,6 +61,9 @@
                 // marshal back to UI thread
                 await InvokeAsync(async () =>
                 {
+                    // Process held keys every frame for smooth movement
+                    ProcessHeldKeys();
+
                     GameService.Update();
                     await RenderFrame();
                 });
@@ -72,6 +93,50 @@
     }
 
     private void Fire() => GameService.FireMissile();
+
+    // Handle key down events
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        // Prevent default browser behavior for arrow keys
+        if (e.Key is "ArrowLeft" or "ArrowRight" or "ArrowUp" or " ")
+        {
+            _pressedKeys.Add(e.Key);
+        }
+
+        // Fire missile on space key (one-shot, not held)
+        if (e.Key == " " && !e.Repeat)
+        {
+            Fire();
+        }
+    }
+
+    // Handle key up events
+    private void HandleKeyUp(KeyboardEventArgs e)
+    {
+        _pressedKeys.Remove(e.Key);
+    }
+
+    // Process keys that are currently held down
+    private void ProcessHeldKeys()
+    {
+        // Rotate left
+        if (_pressedKeys.Contains("ArrowLeft"))
+        {
+            _rotateLeftCommand.Execute(GameService.PlayerShip);
+        }
+
+        // Rotate right
+        if (_pressedKeys.Contains("ArrowRight"))
+        {
+            _rotateRightCommand.Execute(GameService.PlayerShip);
+        }
+
+        // Accelerate
+        if (_pressedKeys.Contains("ArrowUp"))
+        {
+            _accelerateCommand.Execute(GameService.PlayerShip);
+        }
+    }
 
     public void Dispose()
     {
