@@ -3,133 +3,120 @@ using System.Collections.Generic;
 using System.Linq;
 using FlockingSimulator.Domain.Entities;
 using FlockingSimulator.Domain.Interfaces;
+using FlockingSimulator.Domain.Config;
 
 namespace FlockingSimulator.Infrastructure.Behaviors
 {
-    // Implements the classic flocking algorithm with three rules:
-    // 1. Separation - avoid crowding neighbors
-    // 2. Alignment - steer towards average heading of neighbors
-    // 3. Cohesion - steer towards average position of neighbors
+    // Implements the flocking algorithm matching the Python version exactly
+    // with separation, alignment, cohesion, ship avoidance, and aggressive behavior
     public class SimpleFlockingBehavior : IFlockingBehavior
     {
-        // Perception radius for detecting neighbors
-        private const float PerceptionRadius = 50f;
-
-        // Weights for each flocking rule
-        private const float SeparationWeight = 1.5f;
-        private const float AlignmentWeight = 1.0f;
-        private const float CohesionWeight = 1.0f;
-
-        // Desired separation distance from neighbors
-        private const float DesiredSeparation = 25f;
-
         public Vector2 CalculateSteering(Boid boid, IEnumerable<SpaceObject> neighbors)
         {
-            var separation = CalculateSeparation(boid, neighbors);
-            var alignment = CalculateAlignment(boid, neighbors);
-            var cohesion = CalculateCohesion(boid, neighbors);
+            var separation = Vector2.Zero;
+            var alignment = Vector2.Zero;
+            var cohesion = Vector2.Zero;
+            int separationTotal = 0;
+            int alignmentTotal = 0;
+            int cohesionTotal = 0;
 
-            // Combine the three steering forces with weights
-            var steering = separation * SeparationWeight +
-                          alignment * AlignmentWeight +
-                          cohesion * CohesionWeight;
-
-            return steering;
-        }
-
-        // Separation: steer to avoid crowding local neighbors
-        private Vector2 CalculateSeparation(Boid boid, IEnumerable<SpaceObject> neighbors)
-        {
-            var steer = Vector2.Zero;
-            int count = 0;
+            var shipProximitySep = Vector2.Zero;
 
             foreach (var other in neighbors)
             {
-                // Don't compare with self
                 if (other == boid) continue;
 
                 var distance = Vector2.Distance(boid.Position, other.Position);
 
-                // If too close, steer away
-                if (distance > 0 && distance < DesiredSeparation)
+                // Separation - avoid crowding (includes all objects except aggressive boids near ship)
+                if (distance < BoidConfig.SeparationRadius && distance > 0)
                 {
-                    var diff = boid.Position - other.Position;
-                    diff = Vector2.Normalize(diff);
-                    diff /= distance; // Weight by distance (closer = stronger push)
-                    steer += diff;
-                    count++;
+                    // Aggressive boids don't avoid the ship
+                    if (!(boid.IsAggressive && other is Ship))
+                    {
+                        var difference = boid.Position - other.Position;
+                        difference = Vector2.Normalize(difference);
+                        difference /= distance; // Weight by distance
+                        separation += difference;
+                        separationTotal++;
+                    }
+                }
+
+                // Ship proximity separation - non-aggressive boids avoid ship more strongly
+                if (other is Ship && distance < BoidConfig.SeparationRadius)
+                {
+                    if (!boid.IsAggressive)
+                    {
+                        var difference = boid.Position - other.Position;
+                        difference = Vector2.Normalize(difference);
+                        difference /= distance;
+                        shipProximitySep = (separation + difference) * BoidConfig.ShipPresenceFactor;
+                    }
+                }
+
+                // Cohesion - steer towards average position of other boids (not ship)
+                if (distance < BoidConfig.CohesionRadius && other is Boid)
+                {
+                    cohesion += other.Position;
+                    cohesionTotal++;
+                }
+
+                // Alignment - match velocity of nearby boids (not ship)
+                if (distance < BoidConfig.PerceptionRadius && other is Boid)
+                {
+                    alignment += other.Velocity;
+                    alignmentTotal++;
                 }
             }
 
-            // Average the steering force
-            if (count > 0)
+            // Average and apply steering for separation
+            if (separationTotal > 0)
             {
-                steer /= count;
+                separation /= separationTotal;
+                separation = SetMagnitude(separation, BoidConfig.MaxSpeed);
+                separation -= boid.Velocity;
+                separation = LimitMagnitude(separation, BoidConfig.MaxForce);
             }
 
-            return steer;
+            // Average and apply steering for alignment
+            if (alignmentTotal > 0)
+            {
+                alignment /= alignmentTotal;
+                alignment = SetMagnitude(alignment, BoidConfig.MaxSpeed);
+                alignment -= boid.Velocity;
+                alignment = LimitMagnitude(alignment, BoidConfig.MaxForce);
+            }
+
+            // Average and apply steering for cohesion
+            if (cohesionTotal > 0)
+            {
+                cohesion /= cohesionTotal;
+                cohesion -= boid.Position; // Vector pointing to center of mass
+                cohesion = SetMagnitude(cohesion, BoidConfig.MaxSpeed);
+                cohesion -= boid.Velocity;
+                cohesion = LimitMagnitude(cohesion, BoidConfig.MaxForce);
+            }
+
+            return separation + alignment + cohesion + shipProximitySep;
         }
 
-        // Alignment: steer towards the average heading of local neighbors
-        private Vector2 CalculateAlignment(Boid boid, IEnumerable<SpaceObject> neighbors)
+        // Helper method to set vector magnitude
+        private Vector2 SetMagnitude(Vector2 vector, float magnitude)
         {
-            var avgVelocity = Vector2.Zero;
-            int count = 0;
-
-            foreach (var other in neighbors)
-            {
-                // Don't compare with self
-                if (other == boid) continue;
-
-                var distance = Vector2.Distance(boid.Position, other.Position);
-
-                if (distance > 0 && distance < PerceptionRadius)
-                {
-                    avgVelocity += other.Velocity;
-                    count++;
-                }
-            }
-
-            if (count > 0)
-            {
-                avgVelocity /= count;
-                // Steering = desired - current velocity
-                var steer = avgVelocity - boid.Velocity;
-                return steer;
-            }
-
-            return Vector2.Zero;
+            var length = vector.Length();
+            if (length == 0) return vector;
+            return Vector2.Normalize(vector) * magnitude;
         }
 
-        // Cohesion: steer to move toward the average position of local neighbors
-        private Vector2 CalculateCohesion(Boid boid, IEnumerable<SpaceObject> neighbors)
+        // Helper method to limit vector magnitude
+        private Vector2 LimitMagnitude(Vector2 vector, float maxMagnitude)
         {
-            var centerOfMass = Vector2.Zero;
-            int count = 0;
-
-            foreach (var other in neighbors)
+            var length = vector.Length();
+            if (length > maxMagnitude)
             {
-                // Don't compare with self, and only look at other boids
-                if (other == boid || other is not Boid) continue;
-
-                var distance = Vector2.Distance(boid.Position, other.Position);
-
-                if (distance > 0 && distance < PerceptionRadius)
-                {
-                    centerOfMass += other.Position;
-                    count++;
-                }
+                return Vector2.Normalize(vector) * maxMagnitude;
             }
-
-            if (count > 0)
-            {
-                centerOfMass /= count;
-                // Steer towards that location
-                var desired = centerOfMass - boid.Position;
-                return desired;
-            }
-
-            return Vector2.Zero;
+            return vector;
         }
     }
 }
